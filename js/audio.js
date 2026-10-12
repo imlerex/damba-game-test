@@ -4,23 +4,30 @@ const SoundEngine = {
     ambientGain: null,
 
     init() {
-        try {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            this.ctx = new AudioCtx();
-        } catch(e) {
-            console.warn('Web Audio API not supported.');
-        }
+        // Не создаем AudioContext при загрузке, чтобы Safari не рубил скрипт.
+        // Контекст создастся лениво при первом взаимодействии пользователя.
     },
 
-    resume() {
+    ensureContext() {
+        if (!this.ctx) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) {
+                    this.ctx = new AudioCtx();
+                }
+            } catch(e) {
+                console.warn('Web Audio API blocked or not supported in Safari:', e);
+            }
+        }
         if (this.ctx && this.ctx.state === 'suspended') {
             this.ctx.resume();
         }
     },
 
     playTone(freq, type, duration, vol = 0.1) {
-        if (!GameState.settings.sfx || !this.ctx) return;
-        this.resume();
+        if (!GameState.settings.sfx) return;
+        this.ensureContext();
+        if (!this.ctx) return;
 
         try {
             const osc = this.ctx.createOscillator();
@@ -37,6 +44,10 @@ const SoundEngine = {
             osc.start();
             osc.stop(this.ctx.currentTime + duration);
         } catch(e) {}
+    },
+
+    resume() {
+        this.ensureContext();
     },
 
     playWater() {
