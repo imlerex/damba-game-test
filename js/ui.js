@@ -26,9 +26,17 @@ const UI = {
             this.openModal('modal-settings');
         });
 
+        const btnCredits = document.getElementById('btn-credits');
+        if (btnCredits) {
+            btnCredits.addEventListener('click', () => {
+                alert('🌱 Barn Bloom v1.0\nCreated with cozy procedural art & synthesized audio.\nEnjoy your peaceful farming adventure!');
+            });
+        }
+
         document.getElementById('btn-export-save').addEventListener('click', () => {
             const str = SaveSystem.exportString();
-            prompt('Copy your save string:', str);
+            if (str) prompt('Copy your save string:', str);
+            else alert('No save data found yet.');
         });
 
         document.getElementById('btn-import-save').addEventListener('click', () => {
@@ -36,10 +44,27 @@ const UI = {
             if (str) SaveSystem.importString(str);
         });
 
+        const btnExportModal = document.getElementById('btn-export-save-modal');
+        if (btnExportModal) {
+            btnExportModal.addEventListener('click', () => {
+                const str = SaveSystem.exportString();
+                if (str) prompt('Copy your save string:', str);
+                else alert('No save data found yet.');
+            });
+        }
+
+        const btnImportModal = document.getElementById('btn-import-save-modal');
+        if (btnImportModal) {
+            btnImportModal.addEventListener('click', () => {
+                const str = prompt('Paste your save string:');
+                if (str) SaveSystem.importString(str);
+            });
+        }
+
         // Top Toolbar Tool Selection
         const toolBtns = document.querySelectorAll('.tool-btn');
         toolBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', () => {
                 toolBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 GameState.selectedTool = btn.dataset.tool;
@@ -181,7 +206,6 @@ const UI = {
                 SoundEngine.playWater();
                 this.showFloatingText('💧', potIndex);
             } else {
-                // If empty pot and user has seeds, plant default seed
                 const seedId = GameState.selectedSeed;
                 if ((GameState.inventory.seeds[seedId] || 0) > 0) {
                     GameState.inventory.seeds[seedId]--;
@@ -386,7 +410,6 @@ const UI = {
                         GameState.coins -= finalCost;
                         GameState.upgrades[uId] = currentLevel + 1;
 
-                        // Handle special upgrade effects (e.g. Barn expansion pots)
                         if (uId === 'barn_expansion_1') {
                             GameState.pots.push(GameState.createEmptyPot(4), GameState.createEmptyPot(5));
                         } else if (uId === 'barn_expansion_2') {
