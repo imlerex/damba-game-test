@@ -1,0 +1,533 @@
+:root {
+    --bg-primary: #1e1b18;
+    --bg-secondary: #2d2621;
+    --bg-card: #3d342d;
+    --bg-card-hover: #4e4239;
+    --accent-green: #52b788;
+    --accent-green-hover: #40916c;
+    --accent-gold: #e9c46a;
+    --accent-orange: #f4a261;
+    --accent-red: #e76f51;
+    --text-main: #fefae0;
+    --text-muted: #d4a373;
+    --border-color: #5c4d42;
+    --shadow: 0 8px 24px rgba(0,0,0,0.5);
+    --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-stack);
+    user-select: none;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    cursor: pointer;
+    font-family: var(--font-stack);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+.btn {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn:hover {
+    background: var(--bg-card-hover);
+}
+
+.btn.primary {
+    background: var(--accent-green);
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background: var(--accent-green-hover);
+}
+
+.btn.secondary {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+}
+
+.btn.danger {
+    background: var(--accent-red);
+    color: #fff;
+}
+
+.btn.tiny {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Overlays & Menus */
+.overlay-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #12100e 0%, #28211b 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.menu-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    max-width: 420px;
+    width: 100%;
+}
+
+.game-title {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    color: var(--accent-gold);
+}
+
+.game-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.save-import-export-row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Game Container & HUD */
+#game-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#game-container.hidden, .hidden {
+    display: none !important;
+}
+
+#hud {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    z-index: 10;
+}
+
+.hud-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hud-pill {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+}
+
+.coins-pill {
+    color: var(--accent-gold);
+}
+
+.tools-toolbar {
+    background: var(--bg-primary);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.tool-btn {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+}
+
+.tool-btn:hover {
+    color: var(--text-main);
+    background: var(--bg-card);
+}
+
+.tool-btn.active {
+    background: var(--accent-green);
+    color: #fff;
+}
+
+.icon-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.icon-btn:hover {
+    background: var(--bg-card-hover);
+}
+
+/* Main Viewport */
+#game-main {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #141210;
+    overflow: hidden;
+}
+
+#barn-viewport-wrapper {
+    box-shadow: var(--shadow);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+}
+
+canvas {
+    display: block;
+    background: #221c18;
+}
+
+/* Inspection Sidebar */
+#plant-inspect-panel {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 300px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3 {
+    font-size: 1.1rem;
+    color: var(--accent-gold);
+}
+
+.close-btn {
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    padding: 0 6px;
+}
+
+.close-btn:hover {
+    color: var(--text-main);
+}
+
+.panel-body {
+    padding: 16px;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.panel-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-bar-container {
+    background: var(--bg-primary);
+    border-radius: 4px;
+    height: 10px;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    margin-top: 2px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.fill-water { background: #3a86ff; }
+.fill-nutrients { background: #ff006e; }
+.fill-growth { background: var(--accent-green); }
+.fill-health { background: #fb5607; }
+
+/* Footer / Nutrient bar */
+#hud-footer {
+    background: var(--bg-secondary);
+    border-top: 2px solid var(--border-color);
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.nutrient-quick-bar {
+    display: flex;
+    gap: 8px;
+}
+
+.nutrient-pill-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nutrient-pill-btn:hover {
+    background: var(--bg-card-hover);
+}
+
+.barn-status-summary {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+}
+
+.modal-content.large {
+    max-width: 750px;
+}
+
+.modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    color: var(--accent-gold);
+}
+
+.modal-tabs {
+    display: flex;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 16px;
+}
+
+.tab-btn {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 12px 20px;
+    border-radius: 0;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+    color: var(--text-main);
+    border-bottom-color: var(--accent-green);
+    background: var(--bg-secondary);
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tab-pane {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tab-pane.active {
+    display: flex;
+}
+
+.modal-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Shop / Upgrade items */
+.shop-item-card, .upgrade-item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+
+.item-info h4 {
+    color: var(--accent-gold);
+    margin-bottom: 4px;
+}
+
+.item-info p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent-green);
+    color: var(--text-main);
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    font-weight: 600;
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    max-width: 320px;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Debug panel */
+#debug-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(30, 27, 24, 0.95);
+    border: 2px dashed var(--accent-orange);
+    padding: 14px;
+    border-radius: 10px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#debug-panel h4 {
+    color: var(--accent-orange);
+    margin-bottom: 4px;
+}
+
+#debug-panel button {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    text-align: left;
+}
+#debug-panel button:hover {
+    background: var(--bg-card);
+}
