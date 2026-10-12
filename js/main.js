@@ -1,5 +1,4 @@
-window.addEventListener('DOMContentLoaded', () => {
-    // Initialize systems
+function initBarnBloom() {
     GameState.init();
     SoundEngine.init();
     Renderer.init();
@@ -8,13 +7,13 @@ window.addEventListener('DOMContentLoaded', () => {
     // Try loading save
     const loaded = SaveSystem.load();
     if (loaded) {
-        document.getElementById('btn-continue').removeAttribute('disabled');
+        const btnContinue = document.getElementById('btn-continue');
+        if (btnContinue) btnContinue.removeAttribute('disabled');
     }
 
     // Main Game Loop with fixed time-step accumulator
     let lastTime = performance.now();
     const targetFps = 60;
-    const frameInterval = 1000 / targetFps;
     let accumulator = 0;
 
     function gameLoop(currentTime) {
@@ -41,4 +40,11 @@ window.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         SaveSystem.save();
     }, CONFIG.AUTOSAVE_INTERVAL);
-});
+}
+
+// Ensure execution whether DOMContentLoaded already fired or not
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initBarnBloom);
+} else {
+    initBarnBloom();
+}
