@@ -61,6 +61,17 @@ const UI = {
             });
         }
 
+        // Offline Modal Resume Button
+        const btnCloseOffline = document.getElementById('btn-close-offline');
+        if (btnCloseOffline) {
+            btnCloseOffline.addEventListener('click', () => {
+                document.getElementById('modal-offline').classList.add('hidden');
+                document.getElementById('main-menu').classList.add('hidden');
+                document.getElementById('game-container').classList.remove('hidden');
+                SoundEngine.resume();
+            });
+        }
+
         // Top Toolbar Tool Selection
         const toolBtns = document.querySelectorAll('.tool-btn');
         toolBtns.forEach(btn => {
